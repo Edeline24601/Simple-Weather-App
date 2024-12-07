@@ -18,7 +18,7 @@ public class WeatherRepo {
     static RequestQueue requestQueue;
     double lat;
     double lon;
-    String apiKey = "b7b9ccc6a24ebec3032d4c9f74610bc8";
+    String apiKey = "your_api_key";
     static final String URL_Base = "https://api.openweathermap.org/data/3.0/onecall?lat=%s&lon=%s&appid=%s";
     public String URL;
     static final String Icon_URL_Base = "https://openweathermap.org/img/wn/%s@2x.png";
@@ -52,11 +52,17 @@ public class WeatherRepo {
                         JSONObject current = jsonObject.getJSONObject("current");
 
                         weather.time = current.getInt("dt");
+//                        Log.i("weather Request Response", String.valueOf(weather.time));
                         weather.weather_description = current.getJSONArray("weather").getJSONObject(0).getString("main");
+//                        Log.i("Weather Request Response", weather.weather_description);
                         weather.weather_icon_url = String.format(Icon_URL_Base, current.getJSONArray("weather").getJSONObject(0).getString("icon"));
+//                        Log.i("Weather Request Response", weather.weather_icon_url);
                         weather.temperature = current.getInt("temp");
+//                        Log.i("Weather Request Response", String.valueOf(weather.temperature));
                         weather.feels_like = current.getInt("feels_like");
+//                        Log.i("Weather Request Response", String.valueOf(weather.feels_like));
                         weather.humidity = current.getDouble("humidity");
+//                        Log.i("Weather Request Response", String.valueOf(weather.humidity));
                     } catch (Exception e) {
                         // TODO : log 출력으로 변경?
                         e.printStackTrace();

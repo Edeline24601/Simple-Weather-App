@@ -1,6 +1,7 @@
 package com.example.simpleweatherapp.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Weather current_weather = weatherRepo.requestCurrentWeatherData();
+                if (current_weather != null){
+                    Log.i("HomeFragment", current_weather.weather_description);
+                    return;
+                }
                 List<Weather> weatherList = new ArrayList<>();
                 //update current weather
                 ImageView weatherIcon = root.findViewById(R.id.currentWeatherIcon);
