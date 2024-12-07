@@ -1,10 +1,12 @@
 package com.example.simpleweatherapp;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,18 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherRepo {
-    private static RequestQueue requestQueue;
-    private double lat;
-    private double lon;
-    private String apiKey = "your_api_key";
-    private static final String URL_Base = "https://api.openweathermap.org/data/3.0/onecall?lat=%s&lon=%s&appid=%s";
-    private String URL;
-    private static final String Icon_URL_Base = "https://openweathermap.org/img/wn/%s@2x.png";
+    static RequestQueue requestQueue;
+    double lat;
+    double lon;
+    String apiKey = "b7b9ccc6a24ebec3032d4c9f74610bc8";
+    static final String URL_Base = "https://api.openweathermap.org/data/3.0/onecall?lat=%s&lon=%s&appid=%s";
+    public String URL;
+    static final String Icon_URL_Base = "https://openweathermap.org/img/wn/%s@2x.png";
 
-    public WeatherRepo(double lat, double lon){
+    public WeatherRepo(double lat, double lon, Context context){
         this.lat = lat;
         this.lon = lon;
-        URL = String.format(URL_Base, lon, lat, apiKey);
+        URL = String.format(URL_Base, lat, lon, apiKey);
+        if(requestQueue == null){
+            requestQueue = Volley.newRequestQueue(context);
+        }
     }
 
     public WeatherRepo(double lat, double lon, String apiKey){

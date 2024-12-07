@@ -58,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkedButton="@id/hourly"
+                android:id="@+id/radioGroup"
                 android:orientation="horizontal">
 
                 <RadioButton
