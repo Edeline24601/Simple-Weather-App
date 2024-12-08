@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.simpleweatherapp.R;
 import com.example.simpleweatherapp.Weather;
 import com.example.simpleweatherapp.WeatherAdapter;
+import com.example.simpleweatherapp.WeatherCallback;
 import com.example.simpleweatherapp.WeatherRepo;
 import com.example.simpleweatherapp.databinding.FragmentHomeBinding;
 
@@ -29,6 +30,37 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
 
+//    WeatherCallback weatherCallback = new WeatherCallback() {
+//        @Override
+//        public void onCurrentWeather(Weather w) {
+//
+//        }
+//
+//        @Override
+//        public void onCurrentWeatherError(Weather w) {
+//
+//        }
+//
+//        @Override
+//        public void onDailyWeather(List<Weather> daily) {
+//
+//        }
+//
+//        @Override
+//        public void onDailyWeatherError(List<Weather> daily) {
+//
+//        }
+//
+//        @Override
+//        public void onHourlyWeather(List<Weather> hourly) {
+//
+//        }
+//
+//        @Override
+//        public void onHourlyWeatherError(List<Weather> hourly) {
+//
+//        }
+//    }
     private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -44,7 +76,7 @@ public class HomeFragment extends Fragment {
         List<Weather> weatherList = new ArrayList<>();
         // TODO : change to current location, currently hardcoded to seoul station
         WeatherRepo weatherRepo = new WeatherRepo(37.64, 127.07, getContext());
-        weatherList = weatherRepo.requestHourlyWeatherData();
+//        weatherList = weatherRepo.requestHourlyWeatherData();
         WeatherAdapter adapter = new WeatherAdapter(weatherList);
         recyclerView.setAdapter(adapter);
 
@@ -53,36 +85,56 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                Weather current_weather = weatherRepo.requestCurrentWeatherData();
-                if (current_weather != null){
-                    Log.i("HomeFragment", current_weather.weather_description);
-                    return;
-                }
-                List<Weather> weatherList = new ArrayList<>();
-                //update current weather
-                ImageView weatherIcon = root.findViewById(R.id.currentWeatherIcon);
-                TextView weatherDescription = root.findViewById(R.id.currentWeatherDescription);
-                TextView temp = root.findViewById(R.id.temp);
-                TextView humidity = root.findViewById(R.id.humidity);
 
-                //TODO: set image by url
-//                weatherIcon = current_weather.weather_icon_url;;
-                weatherDescription.setText(current_weather.weather_description);
-                temp.setText(String.valueOf(current_weather.temperature));
-                humidity.setText(String.valueOf(current_weather.humidity));
+                Weather current_weather = weatherRepo.requestCurrentWeatherData(new WeatherCallback(){
+                    @Override
+                    public void onCurrentWeather(Weather weather) {
+                        Log.d(HomeFragment.class.getName() + ".onCurrentWeather", weather == null ? "null" : weather.toString());
+                        ImageView weatherIcon = root.findViewById(R.id.currentWeatherIcon);
+                        TextView weatherDescription = root.findViewById(R.id.currentWeatherDescription);
+                        TextView temp = root.findViewById(R.id.temp);
+                        TextView humidity = root.findViewById(R.id.humidity);
 
+                        weatherDescription.setText(weather.weather_description);
+                        temp.setText(String.valueOf(weather.temperature));
+                        humidity.setText(String.valueOf(weather.humidity));
+                    }
+
+                    @Override
+                    public void onCurrentWeatherError(Weather w) {
+
+                    }
+
+                    @Override
+                    public void onDailyWeather(List<Weather> daily) {
+
+                    }
+
+                    @Override
+                    public void onDailyWeatherError(List<Weather> daily) {
+
+                    }
+
+                    @Override
+                    public void onHourlyWeather(List<Weather> hourly) {
+
+                    }
+
+                    @Override
+                    public void onHourlyWeatherError(List<Weather> hourly) {
+
+                    }
+                });
 
                 //update forecast based on checked radio button
                 RadioGroup radioGroup = root.findViewById(R.id.radioGroup);
                 int checkRadioButton = radioGroup.getCheckedRadioButtonId();
                 if(checkRadioButton == R.id.hourly){
-                    weatherList = weatherRepo.requestHourlyWeatherData();
+
                 }
                 else if(checkRadioButton == R.id.daily){
-                    weatherList = weatherRepo.requestDailyWeatherData();
+
                 }
-                adapter.setWeatherList(weatherList);
-                adapter.notifyDataSetChanged();
             }
         });
 

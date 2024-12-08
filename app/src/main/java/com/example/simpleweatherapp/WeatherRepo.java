@@ -22,6 +22,7 @@ public class WeatherRepo {
     static final String URL_Base = "https://api.openweathermap.org/data/3.0/onecall?lat=%s&lon=%s&appid=%s";
     public String URL;
     static final String Icon_URL_Base = "https://openweathermap.org/img/wn/%s@2x.png";
+    List<WeatherCallback> callbacks = new ArrayList<>();
 
     public WeatherRepo(double lat, double lon, Context context){
         this.lat = lat;
@@ -39,7 +40,7 @@ public class WeatherRepo {
         URL = String.format(URL_Base, lon, lat, apiKey);
     }
 
-    public Weather requestCurrentWeatherData() {
+    public Weather requestCurrentWeatherData(WeatherCallback callback) {
         Weather weather = new Weather();
 
         StringRequest request = new StringRequest(
@@ -48,21 +49,26 @@ public class WeatherRepo {
                 response -> {
                     //TODO : json 형식의 response를 weather 클래스에 mapping 하기
                     try {
+                        Log.d(WeatherRepo.class.getName(), response.toString());
+
                         JSONObject jsonObject = new JSONObject(response);
                         JSONObject current = jsonObject.getJSONObject("current");
 
                         weather.time = current.getInt("dt");
-//                        Log.i("weather Request Response", String.valueOf(weather.time));
                         weather.weather_description = current.getJSONArray("weather").getJSONObject(0).getString("main");
-//                        Log.i("Weather Request Response", weather.weather_description);
                         weather.weather_icon_url = String.format(Icon_URL_Base, current.getJSONArray("weather").getJSONObject(0).getString("icon"));
-//                        Log.i("Weather Request Response", weather.weather_icon_url);
                         weather.temperature = current.getInt("temp");
-//                        Log.i("Weather Request Response", String.valueOf(weather.temperature));
                         weather.feels_like = current.getInt("feels_like");
-//                        Log.i("Weather Request Response", String.valueOf(weather.feels_like));
                         weather.humidity = current.getDouble("humidity");
-//                        Log.i("Weather Request Response", String.valueOf(weather.humidity));
+
+                        Log.d(WeatherRepo.class.getName(), "FIRING EVENTS...");
+                        //for (WeatherCallback cb : callbacks){
+                        //    if (cb != null) cb.onCurrentWeather(weather);
+                        //}
+                        if (callback != null) {
+                            Log.d(WeatherRepo.class.getName(), "FIRING EVENTS...");
+                            callback.onCurrentWeather(weather);
+                        }
                     } catch (Exception e) {
                         // TODO : log 출력으로 변경?
                         e.printStackTrace();
@@ -161,5 +167,13 @@ public class WeatherRepo {
         Log.i("WeatherRepo", "Request sent(daily weather)");
 
         return weathers;
+    }
+
+    public void addWeatherCallback(WeatherCallback cb){
+        callbacks.add(cb);
+    }
+
+    public void removeWeatherCallback(WeatherCallback cb){
+        callbacks.remove(cb);
     }
 }
