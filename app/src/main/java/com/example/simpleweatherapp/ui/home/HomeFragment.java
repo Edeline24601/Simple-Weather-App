@@ -72,6 +72,12 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         recyclerView = root.findViewById(R.id.weatherRecyclerView);
+//        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return true;
+//            }
+//        });
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         List<Weather> weatherList = new ArrayList<>();
         // TODO : change to current location, currently hardcoded to seoul station
@@ -82,7 +88,6 @@ public class HomeFragment extends Fragment {
 
         //TODO : set button click listener
         binding.updateButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
 
@@ -156,7 +161,8 @@ public class HomeFragment extends Fragment {
 
                         @Override
                         public void onHourlyWeather(List<Weather> hourly) {
-                            adapter.setWeatherList(hourly);
+                            adapter.setItems(hourly);
+                            adapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -164,7 +170,6 @@ public class HomeFragment extends Fragment {
 
                         }
                     });
-                    adapter.notifyDataSetChanged();
                 }
                 else if(checkRadioButton == R.id.daily){
                     List<Weather> weatherList = weatherRepo.requestDailyWeatherData(new WeatherCallback(){
@@ -181,7 +186,8 @@ public class HomeFragment extends Fragment {
 
                         @Override
                         public void onDailyWeather(List<Weather> daily) {
-                            adapter.setWeatherList(daily);
+                            adapter.setItems(daily);
+                            adapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -199,7 +205,6 @@ public class HomeFragment extends Fragment {
 
                         }
                     });
-                    adapter.notifyDataSetChanged();
                 }
             }
         });

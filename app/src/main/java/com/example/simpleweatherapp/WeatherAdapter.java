@@ -1,7 +1,5 @@
 package com.example.simpleweatherapp;
 
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
     private List<Weather> weatherList;
@@ -47,11 +40,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         return weatherList.size();
     }
 
-    public void setWeatherList(List<Weather> weatherList){
+    public void setItems(List<Weather> weatherList){
         this.weatherList = weatherList;
     }
 
-    public Weather getWeather(int position) {
+    public Weather getItem(int position) {
         return weatherList.get(position);
     }
 
@@ -73,7 +66,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
 
         public void setWeather(Weather weather){
             Date date = new Date(weather.time * 1000L);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");
             Picasso.get().load(weather.weather_icon_url).resize(400, 400).into(weatherIcon);
             time.setText(sdf.format(date));
             temp.setText(String.valueOf(weather.temperature - 273)+"°C");
