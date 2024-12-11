@@ -21,8 +21,8 @@ import com.example.simpleweatherapp.WeatherAdapter;
 import com.example.simpleweatherapp.WeatherCallback;
 import com.example.simpleweatherapp.WeatherRepo;
 import com.example.simpleweatherapp.databinding.FragmentHomeBinding;
+import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,10 +94,15 @@ public class HomeFragment extends Fragment {
                         TextView weatherDescription = root.findViewById(R.id.currentWeatherDescription);
                         TextView temp = root.findViewById(R.id.temp);
                         TextView humidity = root.findViewById(R.id.humidity);
+                        try {
+                            Picasso.get().load(weather.weather_icon_url).resize(400, 400).into(weatherIcon);
+                            weatherDescription.setText(weather.weather_description);
+                            temp.setText(String.valueOf(weather.temperature));
+                            humidity.setText(String.valueOf(weather.humidity));
+                        } catch (Exception e){
+                            Log.e("Current Weather error", e.toString());
+                        }
 
-                        weatherDescription.setText(weather.weather_description);
-                        temp.setText(String.valueOf(weather.temperature));
-                        humidity.setText(String.valueOf(weather.humidity));
                     }
 
                     @Override

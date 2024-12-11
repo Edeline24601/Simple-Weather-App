@@ -33,18 +33,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Weather weather = weatherList.get(position);
-        holder.temp.setText(String.valueOf(weather.temperature));
-        holder.humidity.setText(String.valueOf(weather.humidity));
-        holder.description.setText(weather.weather_description);
-
-        try{
-            URL url = new URL(weather.weather_icon_url);
-            holder.weatherIcon.setImageBitmap(BitmapFactory.decodeStream(url.openConnection().getInputStream()));
-        } catch (IOException e){
-            e.printStackTrace();
-            Log.e("WeatherAdapter", "Error loading image");
-            return;
-        }
+        holder.setWeather(weather);
     }
 
     @Override
@@ -54,6 +43,10 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
 
     public void setWeatherList(List<Weather> weatherList){
         this.weatherList = weatherList;
+    }
+
+    public Weather getWeather(int position) {
+        return weatherList.get(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,6 +61,10 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
             temp = itemView.findViewById(R.id.forecast_weather_temp);
             humidity = itemView.findViewById(R.id.forecast_weather_hum);
             description = itemView.findViewById(R.id.forecast_weather_desc);
+        }
+
+        public void setWeather(Weather weather){
+
         }
     }
 }

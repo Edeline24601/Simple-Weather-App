@@ -12,6 +12,13 @@
             android:layout_width="50dp"
             android:layout_height="50dp"/>
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/forecast_weather_time"
+            android:text="time"
+            android:layout_marginLeft="20dp"/>
+
+        <TextView
             android:id="@+id/forecast_weather_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
