@@ -18,7 +18,7 @@ public class WeatherRepo {
     static RequestQueue requestQueue;
     double lat;
     double lon;
-    String apiKey = "your_api_key";
+    String apiKey = "9e794c23a3290218abaa71d9510bc6df";
     static final String URL_Base = "https://api.openweathermap.org/data/3.0/onecall?lat=%s&lon=%s&appid=%s";
     public String URL;
     static final String Icon_URL_Base = "https://openweathermap.org/img/wn/%s@2x.png";
@@ -86,7 +86,7 @@ public class WeatherRepo {
         return weather;
     }
 
-    public List<Weather> requestHourlyWeatherData(){
+    public List<Weather> requestHourlyWeatherData(WeatherCallback callback){
         List<Weather> weathers = new ArrayList<>();
         StringRequest request = new StringRequest(
             Request.Method.GET,
@@ -111,6 +111,11 @@ public class WeatherRepo {
                         weathers.add(weather);
                     }
 
+                    if (callback!=null){
+                        Log.d(WeatherRepo.class.getName(), "FIRING EVENTS...");
+                        callback.onHourlyWeather(weathers);
+                    }
+
                 } catch (Exception e){
                     //TODO : log 출력으로 바꾸기
                     e.printStackTrace();
@@ -128,7 +133,7 @@ public class WeatherRepo {
         return weathers;
     }
 
-    public List<Weather> requestDailyWeatherData(){
+    public List<Weather> requestDailyWeatherData(WeatherCallback callback){
         List<Weather> weathers = new ArrayList<>();
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -146,12 +151,19 @@ public class WeatherRepo {
                             weather.time = daily.getInt("dt");
                             weather.weather_description = daily.getJSONArray("weather").getJSONObject(0).getString("main");
                             weather.weather_icon_url = String.format(Icon_URL_Base, daily.getJSONArray("weather").getJSONObject(0).getString("icon"));
-                            weather.temperature = daily.getInt("temp");
-                            weather.feels_like = daily.getInt("feels_like");
-                            weather.humidity= daily.getDouble("humidity");
+                            weather.temperature = daily.getJSONObject("temp").getInt("day");
+                            weather.feels_like = daily.getJSONObject("feels_like").getInt("day");
+                            weather.humidity = daily.getDouble("humidity");
+
 
                             weathers.add(weather);
                         }
+
+                        if (callback != null) {
+                            Log.d(WeatherRepo.class.getName(), "FIRING EVENTS...");
+                            callback.onDailyWeather(weathers);
+                        }
+
                     } catch (Exception e){
                         //TODO : log 출력으로 바꾸기
                         e.printStackTrace();
