@@ -40,6 +40,12 @@ public class WeatherRepo {
         URL = String.format(URL_Base, lon, lat, apiKey);
     }
 
+    public void setLocation(double lat, double lon){
+        this.lat = lat;
+        this.lon = lon;
+        URL = String.format(URL_Base, lat, lon, this.apiKey);
+    }
+
     public Weather requestCurrentWeatherData(WeatherCallback callback) {
         Weather weather = new Weather();
 
@@ -47,7 +53,6 @@ public class WeatherRepo {
                 Request.Method.GET,
                 URL,
                 response -> {
-                    //TODO : json 형식의 response를 weather 클래스에 mapping 하기
                     try {
                         Log.d(WeatherRepo.class.getName(), response.toString());
 
@@ -70,7 +75,6 @@ public class WeatherRepo {
                             callback.onCurrentWeather(weather);
                         }
                     } catch (Exception e) {
-                        // TODO : log 출력으로 변경?
                         e.printStackTrace();
                     }
                 },
@@ -92,7 +96,6 @@ public class WeatherRepo {
             Request.Method.GET,
             URL,
             response ->{
-                //TODO : json 형식의 response를 weather 클래스에 mapping 하기
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray hourlyArray = jsonObject.getJSONArray("hourly");
@@ -117,7 +120,6 @@ public class WeatherRepo {
                     }
 
                 } catch (Exception e){
-                    //TODO : log 출력으로 바꾸기
                     e.printStackTrace();
                 }
             },
@@ -139,7 +141,6 @@ public class WeatherRepo {
                 Request.Method.GET,
                 URL,
                 response ->{
-                    //TODO : json 형식의 response를 weather 클래스에 mapping 하기
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         JSONArray dailyArray = jsonObject.getJSONArray("daily");
@@ -165,7 +166,6 @@ public class WeatherRepo {
                         }
 
                     } catch (Exception e){
-                        //TODO : log 출력으로 바꾸기
                         e.printStackTrace();
                     }
                 },

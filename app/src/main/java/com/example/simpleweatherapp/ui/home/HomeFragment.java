@@ -1,5 +1,8 @@
 package com.example.simpleweatherapp.ui.home;
 
+import android.annotation.SuppressLint;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +24,10 @@ import com.example.simpleweatherapp.WeatherAdapter;
 import com.example.simpleweatherapp.WeatherCallback;
 import com.example.simpleweatherapp.WeatherRepo;
 import com.example.simpleweatherapp.databinding.FragmentHomeBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 
@@ -28,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private RecyclerView recyclerView;
 
 //    WeatherCallback weatherCallback = new WeatherCallback() {
@@ -63,6 +71,7 @@ public class HomeFragment extends Fragment {
 //    }
     private FragmentHomeBinding binding;
 
+    @SuppressLint("MissingPermission")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -86,7 +95,19 @@ public class HomeFragment extends Fragment {
         WeatherAdapter adapter = new WeatherAdapter(weatherList);
         recyclerView.setAdapter(adapter);
 
-        //TODO : set button click listener
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location = task.getResult();
+                if(location != null){
+                    weatherRepo.setLocation(location.getLatitude(), location.getLongitude());
+                } else{
+                    Log.d(HomeFragment.class.getName(), "Location is null");
+                }
+            }
+        });
+
         binding.updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
