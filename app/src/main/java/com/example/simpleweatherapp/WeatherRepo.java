@@ -18,7 +18,7 @@ public class WeatherRepo {
     static RequestQueue requestQueue;
     double lat;
     double lon;
-    String apiKey = "9e794c23a3290218abaa71d9510bc6df";
+    String apiKey = "your_api_key";
     static final String URL_Base = "https://api.openweathermap.org/data/3.0/onecall?lat=%s&lon=%s&appid=%s";
     public String URL;
     static final String Icon_URL_Base = "https://openweathermap.org/img/wn/%s@2x.png";
