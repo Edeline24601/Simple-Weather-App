@@ -9,7 +9,7 @@
 - 21번째 줄의 String apiKey = "your_api_key"; -> String apiKey = "9e794c23a3290218abaa71d9510bc6df"; 이렇게 고쳐주셔야 앱이 정상작동합니다.
 
 <br><br>
-앱의 작동 방식은 첨부한 "manual.pdf"를 참고해주십시오.
+앱의 작동 방식은 현재 Repository에 첨부한 "manual.pdf"를 참고해주십시오.
 
 ## 개선사항
 - 
